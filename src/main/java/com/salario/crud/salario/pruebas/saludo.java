@@ -11,15 +11,10 @@ public class saludo {
     @Autowired
     SalarioLogica salarioLogica;
 
-    @GetMapping("salarioPrueba/{salarioTotal}")
-    public Double salarioHora(@PathVariable Double salarioTotal){
-        return salarioLogica.calculoSalarioHora(salarioTotal);
-    }
 
     @GetMapping("saludoPrueba/{nombreUsuario}")
     public String saludo(@PathVariable String nombreUsuario){
-        Double salarioHoraCalculo = salarioHora(1200000.0);
-        return "<h1>Inicializando Servidor ::: " + nombreUsuario + ": " + salarioHoraCalculo + "</h1>";
+        return "<h1>Inicializando Servidor ::: " + nombreUsuario + ": " + "</h1>";
     }
 
 }

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 @Service
@@ -19,32 +19,61 @@ import java.time.temporal.ChronoUnit;
 public class Trabajador {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+    private Double salarioTotal;
     private Boolean esFestivo;
-    private LocalDateTime horaIngreso;
-    private LocalDateTime horaSalida; 
 
     @Autowired
     SalarioLogica salarioLogica;
+
+    @Autowired
+    Horario horario;
 
     public int numeroDiasTrabajados(LocalDate diaInicio, LocalDate diaFinal){
         long duracionDias = ChronoUnit.DAYS.between(diaInicio, diaFinal);
         return (int) duracionDias;
     }
 
-        //Duration duracion = Duration.between(horaIngreso, horaSalida);
-        //int duracionHoras = (int) duracion.toHours();
-    public int numeroHorasTrabajadas(LocalDateTime horaIngreso, LocalDateTime horaSalida){
-        int horaInicial = (int) horaIngreso.getHour();
-        int horaFinal = (int) horaSalida.getHour();
+    Double salarioHora = salarioLogica.calculoSalarioHora(salarioTotal);
 
-        int duracionHoras = horaFinal - horaInicial;
+    public Double calculoSalarioNocturno(LocalTime horaIngreso, LocalTime horaSalida, Boolean diaFestivo){
+        horario.setHoraIngreso(horaIngreso);
+        horario.setHoraSalida(horaSalida);
+        int horasTrabajadas = horario.numeroHorasTrabajadas(horaIngreso, horaSalida);
 
-        return duracionHoras;
+        int numeroHorasExtras = horasTrabajadas - 8;
+
+        if(horasTrabajadas<=8 && diaFestivo){
+            return salarioLogica.calculoHoraNocturna(salarioHora, horasTrabajadas) + salarioLogica.calculoHoraDiaFestivo(salarioHora, horasTrabajadas);
+        }else if(horasTrabajadas<=8 && !diaFestivo){
+            return salarioLogica.calculoHoraNocturna(salarioHora, horasTrabajadas); 
+        }else if(horasTrabajadas>8 && diaFestivo){
+            return salarioLogica.calculoHoraNocturna(salarioHora, horasTrabajadas) + salarioLogica.calculoHoraExtraNocturna(salarioHora, numeroHorasExtras) + salarioLogica.calculoHoraNocturnaFestivo(salarioHora, horasTrabajadas);
+        }else if(horasTrabajadas>8 && !diaFestivo){
+            return salarioLogica.calculoHoraNocturna(salarioHora, horasTrabajadas) + salarioLogica.calculoHoraExtraNocturna(salarioHora, numeroHorasExtras);
+        }
+        return 0.0;
     }
 
-    public Double calculoSalarioTotal(Double salarioTotalMes, LocalDateTime horaIngreso, LocalDateTime horaSalida, LocalDate diaInicio, LocalDate diaFinal){
-        Double salarioHora = salarioLogica.calculoSalarioHora(salarioTotalMes);
+    public Double calculoSalarioDiurno(LocalTime horaIngreso, LocalTime horaSalida, Boolean diaFestivo){
+        horario.setHoraIngreso(horaIngreso);
+        horario.setHoraSalida(horaSalida);
+        int horasTrabajadas = horario.numeroHorasTrabajadas(horaIngreso, horaSalida);
 
+        int numeroHorasExtras = horasTrabajadas - 8;
+
+        if(horasTrabajadas<=8 && !diaFestivo){
+            return salarioHora * horasTrabajadas;
+        }else if(horasTrabajadas<=8 && diaFestivo){
+            return salarioLogica.calculoHoraDiaFestivo(salarioHora, horasTrabajadas);
+        }else if(horasTrabajadas>8 && !diaFestivo){
+            return (salarioHora * (horasTrabajadas)) + salarioLogica.calculoHoraExtra(salarioHora, numeroHorasExtras);
+        }else if(horasTrabajadas>8 && diaFestivo){
+            return (salarioHora * (horasTrabajadas)) + salarioLogica.calculoHoraExtra(salarioHora, numeroHorasExtras) + salarioLogica.calculoHoraDiaFestivo(salarioHora, horasTrabajadas);
+        }
+        return 0.0;
     }
 
+    public Double calculoSalarioMensual(int numeroDiasTrabajado, Double salarioCalculado){
+        return salarioCalculado*numeroDiasTrabajado;
+    }
 }

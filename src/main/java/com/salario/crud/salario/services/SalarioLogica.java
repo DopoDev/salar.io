@@ -22,23 +22,31 @@ public class SalarioLogica {
         return valorHora;
     }
 
-    public Double calculoHoraNocturna(Double valorHora){
-        return valorHora + valorHora*(0.35);
+    public Double calculoHoraNocturna(Double valorHora, int numeroHoras){
+        return (valorHora + valorHora*(0.35)) * numeroHoras;
     }
 
-    public Double calculoHoraExtra(Double valorHora){
-        return valorHora + valorHora*(0.25);
+    public Double calculoHoraDiaFestivo(Double valorHora, int numeroHoras){
+        return (valorHora + valorHora*(0.75)) * numeroHoras;
     }
 
-    public Double calculoHoraExtraNocturna(Double valorHora){
-        return valorHora + valorHora*(0.75);
+    public Double calculoHoraNocturnaFestivo(Double valorHora, int numeroHoras){
+        return calculoHoraNocturna(valorHora, numeroHoras) + calculoHoraDiaFestivo(valorHora, numeroHoras);
     }
 
-    public Double calculoHoraExtraDiurnaFestivo(Double valorHora){
-        return valorHora + calculoHoraExtra(valorHora) + valorHora*(0.75);
+    public Double calculoHoraExtra(Double valorHora, int numeroHoras){
+        return (valorHora + valorHora*(0.25)) * numeroHoras;
     }
 
-    public Double calculoHoraExtraNocturnaFestivo(Double valorHora){
-        return valorHora + calculoHoraNocturna(valorHora) + valorHora*(0.75);
+    public Double calculoHoraExtraNocturna(Double valorHora, int numeroHoras){
+        return (valorHora + valorHora*(0.75)) * numeroHoras;
+    }
+
+    public Double calculoHoraExtraDiurnaFestivo(Double valorHora, int numeroHoras){
+        return (valorHora*numeroHoras) + calculoHoraExtra(valorHora, numeroHoras) + valorHora*(0.75)*numeroHoras;
+    }
+
+    public Double calculoHoraExtraNocturnaFestivo(Double valorHora, int numeroHoras){
+        return valorHora*numeroHoras + calculoHoraNocturna(valorHora, numeroHoras) + valorHora*(0.75)*numeroHoras;
     }
 }

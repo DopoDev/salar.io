@@ -18,8 +18,4 @@ public class TipoHorarios {
     private LocalTime noche2 = LocalTime.of(22, 0);
     private LocalTime noche3 = LocalTime.of(4, 0);
 
-    public Horario horarioEjecutivo = new Horario(mañana2, tarde3);
-    public Horario horario1 = new Horario(mañana1, tarde1);
-    public Horario horario2 = new Horario(tarde1, noche2);
-    public Horario horario3 = new Horario(noche2, mañana1);
 }

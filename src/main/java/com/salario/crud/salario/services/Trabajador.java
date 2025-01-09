@@ -1,5 +1,6 @@
 package com.salario.crud.salario.services;
 
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-@Service
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Service
 public class Trabajador {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
@@ -28,12 +30,19 @@ public class Trabajador {
     @Autowired
     Horario horario;
 
+    private Double salarioHora;
+
     public int numeroDiasTrabajados(LocalDate diaInicio, LocalDate diaFinal){
         long duracionDias = ChronoUnit.DAYS.between(diaInicio, diaFinal);
         return (int) duracionDias;
     }
 
-    Double salarioHora = salarioLogica.calculoSalarioHora(salarioTotal);
+    @PostConstruct
+    public void init(){
+        if(salarioTotal != null){
+            salarioHora = salarioLogica.calculoSalarioHora(salarioTotal);
+        }
+    }
 
     public Double calculoSalarioNocturno(LocalTime horaIngreso, LocalTime horaSalida, Boolean diaFestivo){
         horario.setHoraIngreso(horaIngreso);

@@ -54,17 +54,17 @@ public class saludo {
 
         if(horario.horarioNoche(horaEntrada)){
            Double salarioNocturno = trabajador.calculoSalarioNocturno(horaEntrada, horaSalida, diaFestivo);
-            return salarioTotal + salarioNocturno;
+            salarioTotal += salarioNocturno;
         }
 
         if(!horario.horarioNoche(horaEntrada)){
              Double salarioDiurno = trabajador.calculoSalarioDiurno(horaEntrada, horaSalida, diaFestivo);
-             return salarioTotal + salarioDiurno;
+             salarioTotal += salarioDiurno;
         }
 
         Double salarioTotalTrabajado = trabajador.calculoSalarioMensual(numeroDiasTrabajados, salarioTotal);
 
-        return salarioTotal;
+        return salarioTotalTrabajado;
     }
 
 

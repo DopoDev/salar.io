@@ -1,16 +1,12 @@
 package com.salario.crud.salario.services;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalTime;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @Service
 public class Horario {
@@ -21,11 +17,26 @@ public class Horario {
     public int numeroHorasTrabajadas(LocalTime horaIngreso, LocalTime horaSalida){
         Duration duracion = Duration.between(horaIngreso, horaSalida);
         int duracionHoras = (int) duracion.toHours();
-        return duracionHoras;
+        return Math.abs(duracionHoras);
     }
 
     public Boolean horarioNoche(@NotNull LocalTime horaIngreso){
         return horaIngreso.isAfter(COMIENZO_HORA_NOCTURNA) || horaIngreso.equals(COMIENZO_HORA_NOCTURNA);
     }
 
+    public LocalTime getHoraIngreso() {
+        return horaIngreso;
+    }
+
+    public void setHoraIngreso(LocalTime horaIngreso) {
+        this.horaIngreso = horaIngreso;
+    }
+
+    public LocalTime getHoraSalida() {
+        return horaSalida;
+    }
+
+    public void setHoraSalida(LocalTime horaSalida) {
+        this.horaSalida = horaSalida;
+    }
 }

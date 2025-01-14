@@ -33,7 +33,10 @@ public class saludo {
         Horario horarioBody = request.getHorario();
 
         Double salarioMensual = trabajadorBody.getSalarioTotal();
-        Double salarioHora = trabajadorBody.getSalarioHora();
+        trabajador.setSalarioTotal(salarioMensual);
+        Double trabajadorSalarioMensual = trabajador.getSalarioTotal();
+        Double salarioHora = salarioLogica.calculoSalarioHora(trabajadorSalarioMensual);
+        trabajador.setSalarioHora(salarioHora);
 
         horario.setHoraIngreso(horarioBody.getHoraIngreso());
         LocalTime horaEntrada = horario.getHoraIngreso();

@@ -17,7 +17,11 @@ public class Horario {
     public int numeroHorasTrabajadas(LocalTime horaIngreso, LocalTime horaSalida){
         Duration duracion = Duration.between(horaIngreso, horaSalida);
         int duracionHoras = (int) duracion.toHours();
-        return Math.abs(duracionHoras);
+        if(duracionHoras == 0){
+            return 1;
+        }else{
+            return Math.abs(duracionHoras);
+        }
     }
 
     public Boolean horarioNoche(@NotNull LocalTime horaIngreso){

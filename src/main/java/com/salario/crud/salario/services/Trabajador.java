@@ -18,7 +18,7 @@ public class Trabajador {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private Double salarioTotal;
-    private Boolean esFestivo;
+    private Boolean esFestivo = false;
 
     @Autowired
     SalarioLogica salarioLogica;
@@ -30,7 +30,11 @@ public class Trabajador {
 
     public int numeroDiasTrabajados(LocalDate diaInicio, LocalDate diaFinal){
         long duracionDias = ChronoUnit.DAYS.between(diaInicio, diaFinal);
-        return (int) duracionDias;
+        if(duracionDias == 0){
+            return 1;
+        }else{
+            return (int) Math.abs(duracionDias);
+        }
     }
 
     @PostConstruct

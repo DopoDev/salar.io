@@ -38,6 +38,9 @@ public class saludo {
         Double salarioHora = salarioLogica.calculoSalarioHora(trabajadorSalarioMensual);
         trabajador.setSalarioHora(salarioHora);
 
+//        Boolean diaFestivo = trabajadorBody.getEsFestivo();
+//        trabajador.setEsFestivo(diaFestivo);
+
         horario.setHoraIngreso(horarioBody.getHoraIngreso());
         LocalTime horaEntrada = horario.getHoraIngreso();
         horario.setHoraSalida(horarioBody.getHoraSalida());
